@@ -4,13 +4,12 @@
       <v-row>
         <v-col cols="6" fluid>
           <v-card class="result-card">
-            <p class="noneText" v-if="tid != null">任务---{{ tid }}</p>
             <v-layout class="overflow-visible" style="height: 56px">
               <v-bottom-navigation v-model="value" color="teal" grow elevation="0">
                 <v-btn class="custom-btn" elevation="0">
                   <v-layout align-center>
                     <v-flex>
-                      <span>color_text</span>
+                      <span>color_uncon</span>
                     </v-flex>
                     <v-flex>
                       <v-avatar size="24">
@@ -37,7 +36,7 @@
                 <v-btn class="custom-btn" elevation="0">
                   <v-layout align-center>
                     <v-flex>
-                      <span>uncon</span>
+                      <span>color_text</span>
                     </v-flex>
                     <v-flex>
                       <v-avatar size="24">
@@ -77,78 +76,15 @@
               </div>
             </div>
 
+
             <div v-if="value === 0">
-              <!-- 文本部分 -->
-              <v-container fluid>
-                <v-row>
-                  <v-col cols="6">
-                    <v-card class="upload-card">
-                      <v-file-input v-model="selectedFile" @change="upload" accept="image/*" placeholder="上传图片或者直接拖入"
-                        v-if="selectedFile === null"></v-file-input>
-                      <v-img :src="url_1" v-if="url_1" height="100%" @click="openZoom(url_1)"></v-img>
-                    </v-card>
-                    <v-card-text class="image-text">参考图</v-card-text>
-                  </v-col>
-
-                  <v-col cols="6">
-                    <v-card-text class="image-text">画面描述:</v-card-text>
-                    <v-textarea clearable clear-icon="mdi-close-circle" :label="InputText" :model-value="InputText"
-                      placeholder="请在此输入文本"></v-textarea>
-                    <v-card-text>示例:一只戴着帽子的狗</v-card-text>
-                  </v-col>
-                </v-row>
-                <v-textarea clearable clear-icon="mdi-close-circle" :label="InputText" :model-value="InputText"
-                  placeholder="请在此输入文本"></v-textarea>
-                <v-row style="position: fixed; bottom: 0; left: 55; width: 100%; padding: 40px;">
-                  <v-col cols="12" sm="6" md="4">
-                    <v-btn color="primary" @click="color_text" class="mx-auto">执行</v-btn>
-                    <v-btn color="primary" dark text-color="white" @click="clearJob" class="mx-auto">重做</v-btn>
-                  </v-col>
-                </v-row>
-
-              </v-container>
-            </div>
-
-            <div v-if="value === 1">
-              <v-container fluid>
-                <v-row>
-                  <v-col cols="6">
-                    <v-card class="upload-card">
-                      <v-file-input v-model="selectedFile" @change="upload" accept="image/*" placeholder="上传图片或者直接拖入"
-                        v-if="selectedFile === null"></v-file-input>
-                      <v-img :src="url_1" v-if="url_1" height="400" style="max-width: 100%; max-height: 100%"
-                        @click="openZoom(url_1)"></v-img>
-                    </v-card>
-                    <v-card-text class="image-text">原图(图片点击放大，可选取坐标)</v-card-text>
-                  </v-col>
-
-                  <v-col cols="6">
-                    <v-color-picker v-model="selectedColor" />
-                  </v-col>
-                </v-row>
-                <!-- <v-row justify="center">
-                <v-col cols="12" sm="6" md="4">
-                  <v-color-picker v-model="selectedColor" />
-                </v-col>
-              </v-row> -->
-                <v-row style="position: fixed; bottom: 0; left: 55; width: 100%; padding: 40px;">
-                  <v-col cols="12" sm="6" md="4">
-                    <v-btn color="primary" @click="color_stroke" class="mx-auto">执行</v-btn>
-                    <v-btn color="primary" dark text-color="white" @click="clearJob" class="mx-auto">重做</v-btn>
-                  </v-col>
-                </v-row>
-
-              </v-container>
-            </div>
-
-            <div v-if="value === 2">
               <v-container fluid>
                 <v-row>
                   <v-col cols="12">
                     <v-card class="upload-card">
                       <v-file-input v-model="selectedFile" @change="upload" accept="image/*" placeholder="上传图片或者直接拖入"
                         v-if="selectedFile === null"></v-file-input>
-                      <v-img :src="url_1" v-if="url_1" height="400" style="max-width: 100%; max-height: 100%"
+                      <v-img :src="url_1" v-if="url_1" style="max-width: 100%; max-height: 100%"
                         @click="openZoom(url_1)"></v-img>
                     </v-card>
                     <v-card-text class="image-text">原图</v-card-text>
@@ -168,6 +104,66 @@
 
               </v-container>
             </div>
+            <div v-if="value === 1">
+              <v-container fluid>
+                <v-row>
+                  <v-col cols="6" class="col-container">
+                    <v-card class="upload-card">
+                      <v-file-input v-model="selectedFile" @change="upload" accept="image/*" placeholder="上传图片或者直接拖入"
+                        v-if="selectedFile === null"></v-file-input>
+                      <v-img :src="url_1" v-if="url_1" style="max-width: 100%; max-height: 100%"
+                        @click="openZoom(url_1)"></v-img>
+                    </v-card>
+                    <v-card-text class="image-text">原图</v-card-text>
+                  </v-col>
+                  <v-col cols="6" class="col-container">
+                    <v-card class="upload-card" style="flex: auto;">
+                      <v-img :src="url_2" v-if="url_2" style="max-width: 100%; max-height: 100%"></v-img>
+                    </v-card>
+                    <v-card-text class="image-text">stroke</v-card-text>
+                  </v-col>
+                </v-row>
+                <v-row justify="center">
+                  <v-col cols="12" sm="6" md="4">
+                    <v-color-picker v-model="selectedColor" />
+                  </v-col>
+                </v-row>
+                <v-row style="position: fixed; bottom: 0; left: 55; width: 100%; padding: 40px;">
+                  <v-col cols="12" sm="6" md="4">
+                    <v-btn color="primary" @click="color_stroke" class="mx-auto">执行</v-btn>
+                    <v-btn color="primary" dark text-color="white" @click="clearJob" class="mx-auto">重做</v-btn>
+                  </v-col>
+                </v-row>
+
+              </v-container>
+            </div>
+
+            <div v-if="value === 2">
+              <!-- 文本部分 -->
+              <v-container fluid>
+                <v-row>
+                  <v-col cols="12">
+                    <v-card class="upload-card">
+                      <v-file-input v-model="selectedFile" @change="upload" accept="image/*" placeholder="上传图片或者直接拖入"
+                        v-if="selectedFile === null"></v-file-input>
+                      <v-img :src="url_1" v-if="url_1" @click="openZoom(url_1)"></v-img>
+                    </v-card>
+                    <v-card-text class="image-text">参考图</v-card-text>
+                  </v-col>
+
+
+                </v-row>
+                <v-textarea clearable clear-icon="mdi-close-circle" :label="InputText" :model-value="InputText"
+                  placeholder="请在此输入文本"></v-textarea>
+                <v-row style="position: fixed; bottom: 0; left: 55; width: 100%; padding: 40px;">
+                  <v-col cols="12" sm="6" md="4">
+                    <v-btn color="primary" @click="color_text" class="mx-auto">执行</v-btn>
+                    <v-btn color="primary" dark text-color="white" @click="clearJob" class="mx-auto">重做</v-btn>
+                  </v-col>
+                </v-row>
+
+              </v-container>
+            </div>
 
             <div v-if="value === 3">
               <v-container fluid>
@@ -176,16 +172,16 @@
                     <v-card class="upload-card">
                       <v-file-input v-model="selectedFile" @change="upload" accept="image/*" placeholder="上传图片或者直接拖入"
                         v-if="selectedFile === null"></v-file-input>
-                      <v-img :src="url_1" v-if="url_1" height="400" style="max-width: 100%; max-height: 100%"
+                      <v-img :src="url_1" v-if="url_1" style="max-width: 100%; max-height: 100%"
                         @click="openZoom(url_1)"></v-img>
                     </v-card>
                     <v-card-text class="image-text">原图1</v-card-text>
                   </v-col>
-                  <v-col cols="6">
-                    <v-card class="upload-card">
+                  <v-col cols="6" class="col-container">
+                    <v-card class="upload-card" style="flex: auto;">
                       <v-file-input v-model="selectedExamplar" @change="uploadExample" accept="image/*"
                         placeholder="上传图片或者直接拖入" v-if="selectedExamplar === null"></v-file-input>
-                      <v-img :src="url_3" v-if="url_3" height="400" style="max-width: 100%; max-height: 100%"
+                      <v-img :src="url_3" v-if="url_3" style="max-width: 100%; max-height: 100%"
                         @click="openZoom(url_3)"></v-img>
                     </v-card>
                     <v-card-text class="image-text">原图2</v-card-text>
@@ -232,7 +228,6 @@
 </template>
 
 <script>
-import { eventBus } from "../views/EventBus.js";
 import axios from "axios";
 
 export default {
@@ -270,6 +265,44 @@ export default {
     };
   },
   methods: {
+    loadHistory() {
+      let param = new FormData();
+      param.append("user_id", localStorage.getItem("user_id"));
+      param.append("type", 3);
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      };
+      this.images.unshift('image.jpg');
+      this.isRunning = false;
+      axios
+        .post(this.server_url + "/load", param, config)
+        .then((response) => {
+          console.log(response.data.urls);
+          let array;
+          if (response.data.urls != '') {
+            array = JSON.parse(response.data.urls);
+            console.log(array);
+            this.images.shift();
+            if (array.length > 0) {
+              for (let i = 0; i < array.length - 1; i++) {
+                this.images.unshift(array[i]);
+              }
+            }
+          }
+          else {
+            this.images.shift();
+          }
+
+          this.isRunning = true;
+          console.log(this.images);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     openZoom(imageSrc) {
       this.zoomed = true;
       this.zoomedImage = imageSrc;
@@ -496,7 +529,6 @@ export default {
       this.url_1 = "";
       this.url_2 = "";
       const file = this.selectedFile;
-
       if (file) {
         const reader = new FileReader();
 
@@ -507,27 +539,7 @@ export default {
 
         reader.readAsDataURL(file);
       }
-      let param = new FormData(); //创建form对象
-      param.append("url_1", this.url_1); //通过append向form对象添加数据
-      param.append("type", "2");
-      param.append("user_id", localStorage.getItem("user_id"));
-      param.append("tid", this.tid);
-      let config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      }; //添加请求头
-      axios
-        .post(this.server_url + "/upload", param, config)
-        .then((response) => {
-          console.log("color upload");
-          this.$emit("child-event");
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+
     },
     uploadExample() {
       this.url_3 = "";
@@ -572,26 +584,7 @@ export default {
     },
   },
   created() {
-    eventBus.$on("updateColor", (tid, url_1, url_2, color, text_prompt, example, stroke, type) => {
-      this.tid = tid;
-      this.url_1 = url_1;
-      this.selectedFile = this.url_1;
-      if (this.url_1 == "NULL") {
-        this.url_1 = "";
-        this.selectedFile = "";
-      }
-      this.url_3 = example;
-      this.selectedExamplar = this.url_3;
-      if (this.url_3 == "NULL") {
-        this.url_3 = "";
-        this.selectedExamplar = "";
-      }
-      this.url_2 = url_2;
-      if (color != "NULL") this.selectedColor = color;
-      this.InputText = text_prompt;
-      this.value = type;
-      console.log('color,', this.tid, this.url_1, this.url_2)
-    });
+    this.loadHistory();
   },
 };
 </script>
@@ -636,10 +629,16 @@ export default {
 }
 
 .upload-card {
-  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   padding: 20px;
   border: 2px dashed #ccc;
+}
+
+.upload-card img {
+  object-fit: contain;
 }
 
 .result-card {
@@ -709,8 +708,6 @@ export default {
 }
 
 
-
-
 .spinner {
   width: 56px;
   height: 400px;
@@ -756,6 +753,18 @@ export default {
   width: 100%;
   height: 100%;
   /* padding-bottom: 50%; */
+
+}
+
+.col-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.v-row {
+  display: flex;
+
+  align-items: stretch;
 
 }
 </style>
