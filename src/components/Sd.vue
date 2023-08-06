@@ -5,36 +5,62 @@
       <v-row>
         <v-col cols="6" fluid>
           <v-card class="result-card">
-            <!-- <p class="noneText" v-if="tid != null">任务---{{ tid }}</p> -->
-            <v-item-group mandatory>
-              <v-container>
-                <v-row>
-                  <v-col v-for="n in 3" :key="n" cols="12" md="4">
-                    <v-item v-slot="{ active, toggle }">
-                      <v-card
-                        :color="active ? 'primary' : 'white'"
-                        class="d-flex align-center"
-                        dark
-                        height="200"
-                        @click="toggle"
-                      >
-                        <v-card-text class="image-text" v-if="active === false"
-                          >yuan</v-card-text
-                        >
-                        <v-scroll-y-transition>
-                          <div
-                            v-if="active"
-                            class="text-h2 flex-grow-1 text-center"
-                          >
-                            Active
-                          </div>
-                        </v-scroll-y-transition>
-                      </v-card>
-                    </v-item>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-item-group>
+            <v-layout
+              class="overflow-visible"
+              style="height: 56px; margin-bottom: 2%"
+            >
+              <v-bottom-navigation
+                v-model="value"
+                color="teal"
+                grow
+                elevation="0"
+              >
+                <v-btn class="custom-btn" elevation="0">
+                  <v-layout align-center>
+                    <v-flex>
+                      <span>with mask</span>
+                    </v-flex>
+                    <v-flex>
+                      <v-avatar size="24">
+                        <v-img
+                          src="../assets/14934ed0884cf5e98cc492467d3cd55.png"
+                        ></v-img>
+                      </v-avatar>
+                    </v-flex>
+                  </v-layout>
+                </v-btn>
+
+                <v-btn class="custom-btn" elevation="0">
+                  <v-layout align-center>
+                    <v-flex>
+                      <span>AI mask</span>
+                    </v-flex>
+                    <v-flex>
+                      <v-avatar size="24">
+                        <v-img
+                          src="../assets/14934ed0884cf5e98cc492467d3cd55.png"
+                        ></v-img>
+                      </v-avatar>
+                    </v-flex>
+                  </v-layout>
+                </v-btn>
+
+                <v-btn class="custom-btn" elevation="0">
+                  <v-layout align-center>
+                    <v-flex>
+                      <span>整体微调</span>
+                    </v-flex>
+                    <v-flex>
+                      <v-avatar size="24">
+                        <v-img
+                          src="../assets/14934ed0884cf5e98cc492467d3cd55.png"
+                        ></v-img>
+                      </v-avatar>
+                    </v-flex>
+                  </v-layout>
+                </v-btn>
+              </v-bottom-navigation>
+            </v-layout>
             <div v-if="zoomed">
               <div class="zoomed-image-container">
                 <div class="close-button-back">
@@ -95,24 +121,26 @@
                       :src="url_1"
                       v-if="url_1"
                       height="100%"
-                      @click="openZoom(url_1)"
+                      @click="lookInViewer(url_1)"
                     ></v-img>
                   </v-card>
                   <v-card-text class="image-text">原图</v-card-text>
                 </v-col>
-                <v-col cols="6">
-                  <v-card class="upload-card">
+                <v-col cols="6" class="col-container">
+                  <v-card class="upload-card" style="flex: auto">
                     <v-file-input
-                      v-model="selectedFile"
+                      v-model="selectedFile2"
+                      @change="openImage"
                       accept="image/*"
                       placeholder="上传图片或者直接拖入"
-                      v-if="selectedFile2 === null"
+                      v-if="selectedFile2 === null && value === 0"
                     ></v-file-input>
+
                     <v-img
                       :src="url_2"
                       v-if="url_2"
                       height="100%"
-                      @click="openZoom(url_2)"
+                      @click="lookInViewer(url_2)"
                     ></v-img>
                   </v-card>
                   <v-card-text class="image-text">蒙版</v-card-text>
@@ -185,20 +213,6 @@
                 </v-container>
               </v-row>
 
-              <v-row justify="center">
-                <v-col cols="12" sm="6" md="4">
-                  <v-btn
-                    v-if="url_1 && url_2"
-                    color="pink"
-                    dark
-                    text-color="white"
-                    @click="generateImg"
-                    class="mx-auto"
-                    >生成</v-btn
-                  >
-                </v-col>
-              </v-row>
-
               <v-row
                 style="
                   position: fixed;
@@ -210,12 +224,30 @@
               >
                 <v-col cols="12" sm="6" md="4">
                   <v-btn
+                    v-if="value === 1 && !url_2"
                     color="pink"
                     dark
                     text-color="white"
                     @click="showCanvas = true"
                     class="mx-auto"
                     >蒙版</v-btn
+                  >
+                  <v-btn
+                    color="pink"
+                    dark
+                    text-color="white"
+                    @click="clearJob"
+                    class="mx-auto"
+                    >重做</v-btn
+                  >
+                  <v-btn
+                    v-if="url_1 && url_2"
+                    color="pink"
+                    dark
+                    text-color="white"
+                    @click="generateImg"
+                    class="mx-auto"
+                    >生成</v-btn
                   >
                 </v-col>
               </v-row>
@@ -232,6 +264,7 @@
                       :src="image"
                       height="400"
                       v-if="(isRunning === true && index === 0) || index > 0"
+                      @click="lookInViewer(image)"
                     ></v-img>
                     <div
                       class="loader"
@@ -252,7 +285,6 @@
 </template>
 
 <script>
-import { eventBus } from "../views/EventBus.js";
 import axios from "axios";
 export default {
   data() {
@@ -262,11 +294,13 @@ export default {
       context: null,
       mouseDown: false,
       selectedFile: null,
+      selectedFile2: null,
       showCanvas: false,
       canvasScale: 1.5,
       canvasStyle: "", // 新增canvasStyle变量
       canvasHeight: null,
       canvasWidth: null,
+      value: 0,
       url_1: "",
       url_2: "",
       url_3: "",
@@ -275,6 +309,7 @@ export default {
       mouseCoordinates: { x: 0, y: 0 },
       zoomedImage: "",
       zoomed: false,
+      n: 3,
       cardList: [
         {
           id: 1,
@@ -288,10 +323,6 @@ export default {
           ],
         },
       ],
-      images: [
-        // 添加更多图片...
-      ],
-      isRunning: false,
       PeopleImgList: [
         {
           src: "https://ai-image.weshop.com/2e0ed02c-a340-45e4-94f7-fb673f789bd2.png?w=384",
@@ -464,15 +495,15 @@ export default {
         "老年",
       ],
       selectedTags: [],
+      images: [
+        // 添加更多图片...
+      ],
+      viewerImages: [],
+      isRunning: false,
     };
   },
   created() {
-    eventBus.$on("updateSd", (tid, url_1, url_2, mask) => {
-      this.tid = tid;
-      this.url_1 = url_1;
-      this.url_3 = url_2;
-      this.url_2 = mask;
-    });
+    this.loadHistory();
     this.$watch("showCanvas", (newValue) => {
       if (newValue) {
         this.canvas = this.$refs.canvas;
@@ -487,8 +518,74 @@ export default {
       }
     });
   },
-
+  mounted() {
+    this.$watch("showCanvas", (newValue) => {
+      if (newValue) {
+        this.canvas = this.$refs.canvas;
+        this.context = this.canvas.getContext("2d");
+        this.canvas.width = this.image.width; // 更新 Canvas 的宽度
+        this.canvas.height = this.image.height; // 更新 Canvas 的高度
+        this.context.drawImage(this.image, 0, 0);
+        document.body.style.overflow = "hidden"; // 禁用滚动
+      } else {
+        this.canvasStyle = "";
+        document.body.style.overflow = "auto"; // 启用滚动
+      }
+    });
+  },
   methods: {
+    lookInViewer(url_1) {
+      console.log("aaa");
+      this.viewerImages.push(url_1);
+
+      const $viewer = this.$viewerApi({
+        images: this.viewerImages.filter((image) => image === url_1),
+      });
+    },
+    clearJob() {
+      this.url_1 = "";
+      this.url_2 = "";
+      this.selectedFile = null;
+      this.selectedFile2 = null;
+    },
+    loadHistory() {
+      console.log("history");
+      let param = new FormData();
+      param.append("user_id", localStorage.getItem("user_id"));
+      param.append("type", 1);
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      };
+      this.images.unshift("image.jpg");
+      this.isRunning = false;
+      axios
+        .post(this.server_url + "/load", param, config)
+        .then((response) => {
+          console.log(response.data.urls);
+          let array;
+          if (response.data.urls != "") {
+            array = JSON.parse(response.data.urls);
+            console.log(array);
+            this.images.shift();
+            if (array.length > 0) {
+              for (let i = 0; i < array.length - 1; i++) {
+                this.images.unshift(array[i]);
+              }
+            }
+          } else {
+            this.images.shift();
+          }
+
+          this.isRunning = true;
+          console.log(this.images);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     selectPeopleImage(item) {
       for (var i = 0; i < this.PeopleImgList.length; i++) {
         this.PeopleImgList[i].selected = false;
@@ -510,14 +607,6 @@ export default {
       }
       item.selected = !item.selected;
     },
-    openZoom(imageSrc) {
-      this.zoomed = true;
-      this.zoomedImage = imageSrc;
-    },
-    closeZoom() {
-      this.zoomed = false;
-      this.zoomedImage = "";
-    },
     restoreCanvas() {
       this.showCanvas = false;
       document.body.style.overflow = "auto";
@@ -532,25 +621,12 @@ export default {
         this.url_1 = reader.result;
       };
       reader.readAsDataURL(file);
-      let param = new FormData(); //创建form对象
-      param.append("url_1", this.url_1); //通过append向form对象添加数据
-      param.append("type", "0");
-      param.append("user_id", localStorage.getItem("user_id"));
-      param.append("tid", this.tid);
-      let config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      }; //添加请求头
-      axios
-        .post(this.server_url + "/upload", param, config)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const file2 = this.selectedFile2;
+      const reader2 = new FileReader();
+      reader2.onload = () => {
+        this.url_2 = reader2.result;
+      };
+      reader2.readAsDataURL(file2);
     },
     handleMouseDown(event) {
       this.mouseDown = true;
@@ -659,6 +735,8 @@ export default {
       let param = new FormData();
       param.append("file", file, file.name);
       param.append("mask", file2, file2.name);
+      param.append("user_id", localStorage.getItem("user_id"));
+      param.append("tags", this.selectedTags);
       console.log(this.url_2);
       let config = {
         headers: {
@@ -666,13 +744,23 @@ export default {
         },
         withCredentials: true,
       };
-      this.images.unshift("image.jpg");
+      for (let i = 0; i < this.n; i++) {
+        this.images.unshift("image.jpg");
+      }
       this.isRunning = false;
       axios
-        .post(this.server_url + "/generate1", param, config)
+        .post(this.server_url + "/generate", param, config)
         .then((response) => {
-          console.log(this.url_2);
-          console.log(response);
+          let array = JSON.parse(response.data.draw_url);
+          console.log(array);
+          for (let i = 0; i < this.n; i++) {
+            this.images.shift();
+          }
+          for (let i = 0; i < this.n; i++) {
+            this.images.unshift(array[i]);
+          }
+          this.isRunning = true;
+          console.log(this.images);
         })
         .catch((error) => {
           console.log(error);
@@ -736,10 +824,16 @@ export default {
 }
 
 .upload-card {
-  height: 25vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   padding: 20px;
   border: 2px dashed #ccc;
+}
+
+.upload-card img {
+  object-fit: contain;
 }
 
 .result-card {
@@ -769,7 +863,8 @@ export default {
 
 .allcontainer {
   overflow-y: auto;
-  max-height: 850px;
+  padding: 0px;
+  max-height: 100%;
   /* 设置容器的最大高度 */
   overflow-x: hidden;
   /* 去掉横向滚动条 */
@@ -799,6 +894,10 @@ export default {
 
 .mx-auto {
   display: block;
+  width: 100%;
+}
+
+.custom-btn {
   width: 100%;
 }
 
@@ -847,5 +946,10 @@ export default {
   width: 100%;
   height: 100%;
   /* padding-bottom: 50%; */
+}
+
+.col-container {
+  display: flex;
+  flex-direction: column;
 }
 </style>

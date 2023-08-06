@@ -11,7 +11,6 @@ import "viewerjs/dist/viewer.css";
 
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
-
 Vue.use(Viewer);
 Vue.filter("dateformat", function (indate, outdate) {
   return moment(indate).format(outdate);
