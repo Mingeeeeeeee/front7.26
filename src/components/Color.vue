@@ -92,6 +92,7 @@
               </div>
             </div>
 
+
             <div v-if="value === 0">
               <v-container fluid>
                 <v-row>
@@ -110,6 +111,9 @@
                         style="max-width: 100%; max-height: 100%"
                         @click="lookInViewer(url_1)"
                       ></v-img>
+
+                      
+
                     </v-card>
                     <v-card-text class="image-text">原图</v-card-text>
                   </v-col>
@@ -149,6 +153,7 @@
                 <v-row>
                   <v-col cols="6" class="col-container">
                     <v-card class="upload-card">
+
                       <v-file-input
                         v-model="selectedFile"
                         @change="upload"
@@ -162,16 +167,19 @@
                         style="max-width: 100%; max-height: 100%"
                         @click="lookInViewer(url_1)"
                       ></v-img>
+
                     </v-card>
                     <v-card-text class="image-text">原图</v-card-text>
                   </v-col>
                   <v-col cols="6" class="col-container">
+
                     <v-card class="upload-card" style="flex: auto">
                       <v-img
                         :src="url_2"
                         v-if="url_2"
                         style="max-width: 100%; max-height: 100%"
                       ></v-img>
+
                     </v-card>
                     <v-card-text class="image-text">stroke</v-card-text>
                   </v-col>
@@ -213,6 +221,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-card class="upload-card">
+
                       <v-file-input
                         v-model="selectedFile"
                         @change="upload"
@@ -225,10 +234,14 @@
                         v-if="url_1"
                         @click="lookInViewer(url_1)"
                       ></v-img>
+
                     </v-card>
                     <v-card-text class="image-text">参考图</v-card-text>
                   </v-col>
+
+
                 </v-row>
+
                 <v-textarea
                   clearable
                   clear-icon="mdi-close-circle"
@@ -257,6 +270,7 @@
                       class="mx-auto"
                       >重做</v-btn
                     >
+
                   </v-col>
                 </v-row>
               </v-container>
@@ -267,6 +281,7 @@
                 <v-row>
                   <v-col cols="6">
                     <v-card class="upload-card">
+
                       <v-file-input
                         v-model="selectedFile"
                         @change="upload"
@@ -280,10 +295,12 @@
                         style="max-width: 100%; max-height: 100%"
                         @click="lookInViewer(url_1)"
                       ></v-img>
+
                     </v-card>
                     <v-card-text class="image-text">原图1</v-card-text>
                   </v-col>
                   <v-col cols="6" class="col-container">
+
                     <v-card class="upload-card" style="flex: auto">
                       <v-file-input
                         v-model="selectedExamplar"
@@ -298,6 +315,7 @@
                         style="max-width: 100%; max-height: 100%"
                         @click="lookInViewer(url_3)"
                       ></v-img>
+
                     </v-card>
                     <v-card-text class="image-text">原图2</v-card-text>
                   </v-col>
@@ -403,6 +421,7 @@ export default {
     };
   },
   methods: {
+
     lookInViewer(url_1) {
       console.log("aaa");
       this.viewerImages.push(url_1);
@@ -411,6 +430,7 @@ export default {
         images: this.viewerImages.filter((image) => image === url_1),
       });
     },
+
     loadHistory() {
       let param = new FormData();
       param.append("user_id", localStorage.getItem("user_id"));
@@ -422,13 +442,16 @@ export default {
         withCredentials: true,
       };
       this.images.unshift("image.jpg");
+
       this.isRunning = false;
       axios
         .post(this.server_url + "/load", param, config)
         .then((response) => {
           console.log(response.data.urls);
           let array;
+
           if (response.data.urls != "") {
+
             array = JSON.parse(response.data.urls);
             console.log(array);
             this.images.shift();
@@ -437,7 +460,9 @@ export default {
                 this.images.unshift(array[i]);
               }
             }
+
           } else {
+
             this.images.shift();
           }
 
@@ -681,6 +706,7 @@ export default {
 
         reader.readAsDataURL(file);
       }
+
     },
     uploadExample() {
       this.url_3 = "";
@@ -848,6 +874,7 @@ export default {
   width: 100%;
 }
 
+
 .spinner {
   width: 56px;
   height: 400px;
@@ -904,5 +931,17 @@ export default {
   display: flex;
 
   align-items: stretch;
+}
+
+.col-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.v-row {
+  display: flex;
+
+  align-items: stretch;
+
 }
 </style>

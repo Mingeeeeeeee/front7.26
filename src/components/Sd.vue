@@ -5,6 +5,7 @@
       <v-row>
         <v-col cols="6" fluid>
           <v-card class="result-card">
+
             <v-layout
               class="overflow-visible"
               style="height: 56px; margin-bottom: 2%"
@@ -15,6 +16,7 @@
                 grow
                 elevation="0"
               >
+
                 <v-btn class="custom-btn" elevation="0">
                   <v-layout align-center>
                     <v-flex>
@@ -22,9 +24,11 @@
                     </v-flex>
                     <v-flex>
                       <v-avatar size="24">
+
                         <v-img
                           src="../assets/14934ed0884cf5e98cc492467d3cd55.png"
                         ></v-img>
+
                       </v-avatar>
                     </v-flex>
                   </v-layout>
@@ -37,13 +41,16 @@
                     </v-flex>
                     <v-flex>
                       <v-avatar size="24">
+
                         <v-img
                           src="../assets/14934ed0884cf5e98cc492467d3cd55.png"
                         ></v-img>
+
                       </v-avatar>
                     </v-flex>
                   </v-layout>
                 </v-btn>
+
 
                 <v-btn class="custom-btn" elevation="0">
                   <v-layout align-center>
@@ -52,13 +59,16 @@
                     </v-flex>
                     <v-flex>
                       <v-avatar size="24">
+
                         <v-img
                           src="../assets/14934ed0884cf5e98cc492467d3cd55.png"
                         ></v-img>
+
                       </v-avatar>
                     </v-flex>
                   </v-layout>
                 </v-btn>
+
               </v-bottom-navigation>
             </v-layout>
             <div v-if="zoomed">
@@ -110,6 +120,7 @@
               <v-row>
                 <v-col cols="6">
                   <v-card class="upload-card">
+
                     <v-file-input
                       v-model="selectedFile"
                       @change="openImage"
@@ -123,10 +134,12 @@
                       height="100%"
                       @click="lookInViewer(url_1)"
                     ></v-img>
+
                   </v-card>
                   <v-card-text class="image-text">原图</v-card-text>
                 </v-col>
                 <v-col cols="6" class="col-container">
+
                   <v-card class="upload-card" style="flex: auto">
                     <v-file-input
                       v-model="selectedFile2"
@@ -142,12 +155,14 @@
                       height="100%"
                       @click="lookInViewer(url_2)"
                     ></v-img>
+
                   </v-card>
                   <v-card-text class="image-text">蒙版</v-card-text>
                 </v-col>
               </v-row>
 
               <v-row>
+
                 <p style="margin-top: 20px">
                   面具（下列头像仅代表模特类型和性别）
                 </p>
@@ -167,6 +182,7 @@
                         outlined
                         @click="selectPeopleImage(item)"
                       >
+
                         <v-img :src="item.src" :alt="item.alt"></v-img>
                       </v-card>
                     </v-col>
@@ -177,17 +193,20 @@
                 <v-row justify="space-around">
                   <v-col cols="auto">
                     <v-chip-group multiple v-model="selectedTags">
+
                       <v-chip
                         v-for="(tag, index) in tags"
                         :key="index"
                         @click="toggleTag(tag)"
                         :class="{ blue: selectedTags.includes(tag) }"
                       >
+
                         {{ tag }}
                       </v-chip>
                     </v-chip-group>
                   </v-col>
                 </v-row>
+
 
                 <p style="margin-top: 20px">地点</p>
                 <v-container fluid>
@@ -207,11 +226,13 @@
                       >
                         <v-img :src="item.src" :alt="item.alt"></v-img>
                         <p style="text-align: center">{{ item.alt }}</p>
+
                       </v-card>
                     </v-col>
                   </v-row>
                 </v-container>
               </v-row>
+
 
               <v-row
                 style="
@@ -251,6 +272,7 @@
                   >
                 </v-col>
               </v-row>
+
             </div>
           </v-card>
         </v-col>
@@ -324,6 +346,7 @@ export default {
         },
       ],
       PeopleImgList: [
+
         {
           src: "https://ai-image.weshop.com/2e0ed02c-a340-45e4-94f7-fb673f789bd2.png?w=384",
           alt: "Image 1",
@@ -494,6 +517,7 @@ export default {
         "中年",
         "老年",
       ],
+
       selectedTags: [],
       images: [
         // 添加更多图片...
@@ -534,6 +558,7 @@ export default {
     });
   },
   methods: {
+
     lookInViewer(url_1) {
       console.log("aaa");
       this.viewerImages.push(url_1);
@@ -542,6 +567,7 @@ export default {
         images: this.viewerImages.filter((image) => image === url_1),
       });
     },
+
     clearJob() {
       this.url_1 = "";
       this.url_2 = "";
@@ -549,7 +575,9 @@ export default {
       this.selectedFile2 = null;
     },
     loadHistory() {
+
       console.log("history");
+
       let param = new FormData();
       param.append("user_id", localStorage.getItem("user_id"));
       param.append("type", 1);
@@ -559,14 +587,18 @@ export default {
         },
         withCredentials: true,
       };
+
       this.images.unshift("image.jpg");
+
       this.isRunning = false;
       axios
         .post(this.server_url + "/load", param, config)
         .then((response) => {
           console.log(response.data.urls);
           let array;
+
           if (response.data.urls != "") {
+
             array = JSON.parse(response.data.urls);
             console.log(array);
             this.images.shift();
@@ -575,9 +607,11 @@ export default {
                 this.images.unshift(array[i]);
               }
             }
+
           } else {
             this.images.shift();
           }
+
 
           this.isRunning = true;
           console.log(this.images);
@@ -588,7 +622,9 @@ export default {
     },
     selectPeopleImage(item) {
       for (var i = 0; i < this.PeopleImgList.length; i++) {
+
         this.PeopleImgList[i].selected = false;
+
       }
       item.selected = !item.selected;
     },
@@ -599,11 +635,13 @@ export default {
         this.selectedTags.push(tag);
       }
 
+
       console.log(this.selectedTags);
     },
     selectPlaceImage(item) {
       for (var i = 0; i < this.PlaceImgList.length; i++) {
         this.PlaceImgList[i].selected = false;
+
       }
       item.selected = !item.selected;
     },
@@ -745,7 +783,9 @@ export default {
         withCredentials: true,
       };
       for (let i = 0; i < this.n; i++) {
+
         this.images.unshift("image.jpg");
+
       }
       this.isRunning = false;
       axios
@@ -901,6 +941,7 @@ export default {
   width: 100%;
 }
 
+
 .spinner {
   width: 56px;
   height: 56px;
@@ -946,6 +987,11 @@ export default {
   width: 100%;
   height: 100%;
   /* padding-bottom: 50%; */
+}
+
+.col-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .col-container {

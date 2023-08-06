@@ -24,6 +24,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
+
                   <v-card class="upload-card" @click="handleClick">
                     <v-file-input
                       v-model="selectedFile"
@@ -41,6 +42,7 @@
                   </v-card>
                   <v-card-text class="image-text">原图</v-card-text>
                 </v-col>
+
               </v-row>
 
               <v-row
@@ -125,6 +127,8 @@ export default {
       mouseX: 0,
       mouseY: 0,
 
+
+
       images: [
         // 添加更多图片...
       ],
@@ -133,6 +137,7 @@ export default {
     };
   },
   methods: {
+
     lookInViewer(url_1) {
       console.log("aaa");
       this.viewerImages.push(url_1);
@@ -170,6 +175,7 @@ export default {
           } else {
             this.images.shift();
           }
+
 
           this.isRunning = true;
           console.log(this.images);
@@ -230,7 +236,9 @@ export default {
         },
         withCredentials: true,
       }; //添加请求头
+
       this.images.unshift("1.gif");
+
       this.isRunning = false;
       axios
         .post(this.server_url + "/seg", param, config)
@@ -388,6 +396,7 @@ export default {
   padding: 0px;
   border: 2px solid #ccc;
 }
+
 
 .spinner {
   width: 56px;
