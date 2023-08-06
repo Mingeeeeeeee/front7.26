@@ -11,7 +11,11 @@
               <div class="close-button-back">
                 <div class="close-button" @click="closeZoom">X</div>
               </div>
-              <img ref="myImage" :src="zoomedImage" @click="recordClickPosition" />
+              <img
+                ref="myImage"
+                :src="zoomedImage"
+                @click="recordClickPosition"
+              />
               <div class="box" id="box"></div>
             </div>
           </div>
@@ -20,38 +24,76 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
-                  <v-card class="upload-card " @click="handleClick">
-                    <v-file-input v-model="selectedFile" @change="update" accept="image/*" placeholder="上传图片或者直接拖入"
-                      v-if="selectedFile === null"></v-file-input>
-                    <v-img :src="url_1" v-if="url_1" style="max-width: 100%; max-height: 100%"
-                      @click="openZoom(url_1)"></v-img>
+
+                  <v-card class="upload-card" @click="handleClick">
+                    <v-file-input
+                      v-model="selectedFile"
+                      @change="update"
+                      accept="image/*"
+                      placeholder="上传图片或者直接拖入"
+                      v-if="selectedFile === null"
+                    ></v-file-input>
+                    <img
+                      :src="url_1"
+                      v-if="url_1"
+                      style="max-width: 100%; max-height: 100%"
+                      @click="lookInViewer(url_1)"
+                    />
                   </v-card>
                   <v-card-text class="image-text">原图</v-card-text>
                 </v-col>
 
               </v-row>
 
-              <v-row style="position: fixed; bottom: 0; left: 55; width: 100%; padding: 40px;">
+              <v-row
+                style="
+                  position: fixed;
+                  bottom: 0;
+                  left: 55;
+                  width: 100%;
+                  padding: 40px;
+                "
+              >
                 <v-col cols="12" sm="6" md="4">
                   <!-- <v-btn color="primary" @click="color_examplar" class="mx-auto">执行</v-btn> -->
-                  <v-btn color="light-green" dark text-color="white" @click="seg" class="mx-auto">裁切</v-btn>
-                  <v-btn color="light-green" dark text-color="white" @click="clearJob" class="mx-auto">重做</v-btn>
+                  <v-btn
+                    color="light-green"
+                    dark
+                    text-color="white"
+                    @click="seg"
+                    class="mx-auto"
+                    >裁切</v-btn
+                  >
+                  <v-btn
+                    color="light-green"
+                    dark
+                    text-color="white"
+                    @click="clearJob"
+                    class="mx-auto"
+                    >重做</v-btn
+                  >
                 </v-col>
               </v-row>
-
             </v-container>
           </v-card>
         </v-col>
         <v-col cols="6" fluid>
           <v-card class="result-card">
-
             <v-container>
               <v-row>
                 <v-col v-for="(image, index) in images" :key="index" cols="4">
                   <v-card>
-                    <v-img :src="image" height="400" v-if="(isRunning === true && index === 0) || index > 0"></v-img>
-                    <div class="loader" v-if="(isRunning === false && index === 0)">
-                      <img src="./1.gif" height="400" alt="动态图像">
+                    <v-img
+                      :src="image"
+                      height="400"
+                      v-if="(isRunning === true && index === 0) || index > 0"
+                      @click="lookInViewer(image)"
+                    ></v-img>
+                    <div
+                      class="loader"
+                      v-if="isRunning === false && index === 0"
+                    >
+                      <img src="./1.gif" height="400" alt="动态图像" />
                     </div>
                   </v-card>
                 </v-col>
@@ -59,7 +101,6 @@
             </v-container>
           </v-card>
           <v-card-text class="image-text">结果图</v-card-text>
-
         </v-col>
       </v-row>
     </v-container>
@@ -86,14 +127,25 @@ export default {
       mouseX: 0,
       mouseY: 0,
 
-      images: [
 
+
+      images: [
         // 添加更多图片...
       ],
+      viewerImages: [],
       isRunning: false,
     };
   },
   methods: {
+
+    lookInViewer(url_1) {
+      console.log("aaa");
+      this.viewerImages.push(url_1);
+
+      const $viewer = this.$viewerApi({
+        images: this.viewerImages.filter((image) => image === url_1),
+      });
+    },
     loadHistory() {
       let param = new FormData();
       param.append("user_id", localStorage.getItem("user_id"));
@@ -104,14 +156,14 @@ export default {
         },
         withCredentials: true,
       };
-      this.images.unshift('image.jpg');
+      this.images.unshift("image.jpg");
       this.isRunning = false;
       axios
         .post(this.server_url + "/load", param, config)
         .then((response) => {
           console.log(response.data.urls);
           let array;
-          if (response.data.urls != '') {
+          if (response.data.urls != "") {
             array = JSON.parse(response.data.urls);
             console.log(array);
             this.images.shift();
@@ -120,10 +172,10 @@ export default {
                 this.images.unshift(array[i]);
               }
             }
-          }
-          else {
+          } else {
             this.images.shift();
           }
+
 
           this.isRunning = true;
           console.log(this.images);
@@ -184,7 +236,9 @@ export default {
         },
         withCredentials: true,
       }; //添加请求头
-      this.images.unshift('1.gif');
+
+      this.images.unshift("1.gif");
+
       this.isRunning = false;
       axios
         .post(this.server_url + "/seg", param, config)
@@ -389,7 +443,6 @@ export default {
   width: 100%;
   height: 100%;
   /* padding-bottom: 50%; */
-
 }
 
 .selected {
