@@ -61,7 +61,7 @@
                 </v-list>
               </v-navigation-drawer> -->
       <v-main class="grey lighten-3">
-        
+
         <v-row>
           <v-col cols="12" fluid>
             <v-sheet max-width="100vw" min-height="100vh" rounded="lg">
@@ -152,8 +152,6 @@ export default {
     };
   },
   created() {
-    this.updateTask();
-    console.log("updateTask!!");
   },
   mounted() {
   },
@@ -162,122 +160,23 @@ export default {
       if (index === 0) {
         let item = this.items[index].subItems[subIndex];
         console.log(item)
-        eventBus.$emit("updateSd", item.id, item.url_1, item.url_2, item.mask);
         this.$router.push("/home/sd/" + subIndex);
 
       }
       if (index === 1) {
         let item = this.items[index].subItems[subIndex];
         console.log(item.id, item.url_1, item.url_2);
-        eventBus.$emit("updateSeg", item.id, item.url_1, item.url_2);
         this.$router.push("/home/seg/" + subIndex);
 
       }
       if (index === 2) {
         let item = this.items[index].subItems[subIndex];
         console.log(item)
-        eventBus.$emit("updateColor", item.id, item.url_1, item.url_2, item.color, item.text_prompt, item.example, item.stroke, item.type);
         this.$router.push("/home/color/" + subIndex);
-
-
       }
 
     },
-    updateTask() {
-      const user_id = localStorage.getItem("user_id");
-      let param = new FormData();
-      param.append("user_id", user_id);
-      let config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      };
-      axios
-        .post(this.server_url + "/api/task", param, config)
-        .then((response) => {
-          this.items[0].subItems = response.data.tasks0;
-          this.items[1].subItems = response.data.tasks1;
-          this.items[2].subItems = response.data.tasks2;
-          // this.items[3].subItems = response.data.tasks3;
-          // this.items[4].subItems = response.data.tasks4;
-          console.log(this.items[0].subItems);
-          console.log(this.items[1].subItems);
-          console.log(this.items[2].subItems);
 
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
-    async showDeleteSnackbar(tid) {
-      console.log("删除", tid);
-      const user_id = localStorage.getItem("user_id");
-      console.log(user_id);
-      let param = new FormData();
-      param.append("user_id", user_id);
-      param.append("tid", tid);
-      let type = "0";
-      if (String(this.$route.path).indexOf("sd") != -1) type = "0";
-      else if (String(this.$route.path).indexOf("seg") != -1) type = "1";
-      else if (String(this.$route.path).indexOf("color") != -1) type = "2";
-      param.append("type", type);
-      let config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      };
-      axios
-        .post(this.server_url + "/deleteJob", param, config)
-        .then((response) => {
-          console.log(response);
-          // this.$router.go(Number((this.$route.path).substr(-1, 1)));
-          // console.log('router  home/', Number((this.$route.path).substr(-1, 1)));
-          location.reload();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      this.snackbar.show = true;
-      this.snackbar.message = "删除任务成功"; // 自定义要显示的消息文本
-      this.snackbar.color = "success"; // 自定义消息的颜色
-      this.updateTask();
-      console.log("updateTask!!");
-    },
-    async showAddSnackbar() {
-      const user_id = localStorage.getItem("user_id");
-      console.log(user_id);
-      let param = new FormData();
-      param.append("user_id", user_id);
-      let type = "0";
-      if (String(this.$route.path).indexOf("sd") != -1) type = "0";
-      else if (String(this.$route.path).indexOf("seg") != -1) type = "1";
-      else if (String(this.$route.path).indexOf("color") != -1) { type = "2"; console.log('delete color!') };
-      param.append("type", type);
-      let config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      };
-      axios
-        .post(this.server_url + "/addJob", param, config)
-        .then((response) => {
-          console.log(response);
-          // this.$router.go(Number((this.$route.path).substr(-1, 1)));
-          // console.log('router  home/', Number((this.$route.path).substr(-1, 1)));
-          location.reload();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      this.snackbar.show = true;
-      this.snackbar.message = "新增任务成功"; // 自定义要显示的消息文本
-      this.snackbar.color = "success"; // 自定义消息的颜色
-      this.updateTask();
-      console.log("updateTask!!");
-    },
   },
 };
 </script>
