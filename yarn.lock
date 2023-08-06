@@ -8199,6 +8199,11 @@
     "loader-utils" "^1.1.0"
     "neo-async" "^2.6.0"
 
+"throttle-debounce@^2.0.1":
+  "integrity" "sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ=="
+  "resolved" "https://registry.npmmirror.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz"
+  "version" "2.3.0"
+
 "through@^2.3.6":
   "integrity" "sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU="
   "resolved" "https://registry.nlark.com/through/download/through-2.3.8.tgz"
@@ -8565,6 +8570,14 @@
   "resolved" "https://registry.npmmirror.com/uuid/download/uuid-8.3.2.tgz"
   "version" "8.3.2"
 
+"v-viewer@^1.6.4":
+  "integrity" "sha512-LVkiUHpmsbsZXebeNXnu8krRCi5i2n07FeLFxoIVGhw8lVvTBO0ffpbDC6mLEuacCjrIh09HjIqpciwUtWE8lQ=="
+  "resolved" "https://registry.npmmirror.com/v-viewer/-/v-viewer-1.6.4.tgz"
+  "version" "1.6.4"
+  dependencies:
+    "throttle-debounce" "^2.0.1"
+    "viewerjs" "^1.5.0"
+
 "v8-compile-cache@^2.0.3":
   "integrity" "sha1-LeGWGMZtwkfc+2+ZM4A12CRaLO4="
   "resolved" "https://registry.nlark.com/v8-compile-cache/download/v8-compile-cache-2.3.0.tgz"
@@ -8596,6 +8609,11 @@
     "assert-plus" "^1.0.0"
     "core-util-is" "1.0.2"
     "extsprintf" "^1.2.0"
+
+"viewerjs@^1.11.4", "viewerjs@^1.5.0":
+  "integrity" "sha512-/mnqMIwt5Bi9j59+48OqQtqgOx8oh186Xshdr/dqqBrakMSMlLt/jmeNHBod0PvOkesZf66ivQbWmtWYBlKetg=="
+  "resolved" "https://registry.npmmirror.com/viewerjs/-/viewerjs-1.11.4.tgz"
+  "version" "1.11.4"
 
 "vm-browserify@^1.0.1":
   "integrity" "sha1-eGQcSIuObKkadfUR56OzKobl3aA="
@@ -8684,6 +8702,11 @@
   "integrity" "sha1-HuO8mhbsv1EYvjNLsV+cRvgvWCU="
   "resolved" "https://registry.nlark.com/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz?cache=0&sync_timestamp=1622604416998&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fvue-template-es2015-compiler%2Fdownload%2Fvue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
+
+"vue-viewer@^1.0.4":
+  "integrity" "sha512-wXNqcHR6BhoESCmSdQcNAwzNeOquZVxqphQRZlcZRr01xhso6pj5jtAknLNbBNWYOYnl8b8SpOsi5ob8agvrlw=="
+  "resolved" "https://registry.npmmirror.com/vue-viewer/-/vue-viewer-1.0.4.tgz"
+  "version" "1.0.4"
 
 "vue@^2 || ^3.0.0-0", "vue@^2.0.0", "vue@^2.6.0", "vue@^2.6.11", "vue@^2.6.4", "vue@>=2.5.0":
   "integrity" "sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ=="
